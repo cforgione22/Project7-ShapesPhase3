@@ -1,6 +1,8 @@
 package org.example;
 
+import javax.management.remote.JMXConnectorServerFactory;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,10 @@ public class CanvasComponent extends JComponent {
     private Point startPoint;//default starting point
     private Point endPoint;
     private boolean drawTrails;     // toggled value based on user response
+    private char save;
+    private char restore;
+
+    JFileChooser fileChooser = new JFileChooser();
 
     public CanvasComponent() // default constructor using the above default values.
     {
@@ -28,6 +34,9 @@ public class CanvasComponent extends JComponent {
         currentShape = ShapeType.BOX;
         currentColor = Color.BLACK;
         drawTrails = false;
+        save = ' ';
+        restore = ' ';
+
     }
 
     /**
@@ -44,7 +53,6 @@ public class CanvasComponent extends JComponent {
      * Establish the appropriate starting point as given to us by the caller. then, the shape
      * can be added to the list of shapes, ultimately drawing the shapes and flushing the
      * drawing to the user
-     *
      * @param p
      */
     public void createShape(Point p) {
@@ -56,7 +64,6 @@ public class CanvasComponent extends JComponent {
     /**
      * This method constructs the appropriate shape for given starting and ending point.
      * Then, the shape is including in the list of shapes.
-     *
      * @param p
      */
 
@@ -71,7 +78,6 @@ public class CanvasComponent extends JComponent {
             shapes.add(new Oval(startPoint, p, currentColor));
             }
         }
-
 
     /**
      * This method allows for trailing drawings to appear, potentially filling the shape, if the
@@ -91,10 +97,26 @@ public class CanvasComponent extends JComponent {
         repaint();
     }
 
+
+
+    /**
+     * When the user presses ‘r’, the program should display a JFileChooser dialog box using the
+     * showOpenDialog method. Check the result to make sure that a file name was selected. Use
+     * an ObjectInputStream to input the list of shapes. This should be accomplished without
+     * writing a loop that iterates through the file. Repaint the form so that the drawing read from
+     * the file is displayed.
+     */
+//    public char showOpenDialog(JFileChooser chooseFile) {
+//        //ObjectInputStream to input the list of shapes.
+//        //Repaint the form so that the drawing read from the file is displayed.
+//        return restore;
+//    }
+
+
+
     /**
      * This method considers user keystrokes to establish the drawing configuration (shape type, color, etc.)
-     *
-     * @param key
+     *@param key
      */
     public void processKeys(char key) {
         switch (Character.toLowerCase(key)) {
@@ -116,7 +138,14 @@ public class CanvasComponent extends JComponent {
                 break;
             case 'c':           //swing's color chooser is a convenient way to input the color.
                 currentColor = JColorChooser.showDialog(null, "Choose a shape color", currentColor);
-            default:          // Consider error processing  with alerts (unexpected values, logic errors, etc.)
+                break;
+            case 's':
+                save = (char) fileChooser.showSaveDialog(getParent());
+                break;
+//            case 'r':
+//                restore = showOpenDialog();
+//                break;
+                default:          // Consider error processing  with alerts (unexpected values, logic errors, etc.)
                 break;
         }
     }

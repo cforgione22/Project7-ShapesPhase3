@@ -32,6 +32,7 @@ public class PictureFrame extends JFrame {
         public void mouseDragged(MouseEvent e) {
             scene.drawShape(e.getPoint());
         }
+
     }
 
     /**
@@ -44,6 +45,8 @@ public class PictureFrame extends JFrame {
             scene.processKeys(e.getKeyChar());
         }
     }
+
+
 
     /**
      * This default constructor established the appropriate user menus, drawing widgets, and events
@@ -62,7 +65,7 @@ public class PictureFrame extends JFrame {
          * Display the keystroke options to the user.
          */
         JLabel keyGuide = new JLabel();
-        keyGuide.setText("(E)rase (T)rails (L)ine (B)ox (O)val (C)olor");
+        keyGuide.setText("(E)rase (T)rails (L)ine (B)ox (O)val (C)olor (S)ave (R)estore");
         keyGuide.setFont(new Font("SansSerif", Font.PLAIN, 24));
         keyGuide.setHorizontalAlignment(SwingConstants.CENTER);
 
