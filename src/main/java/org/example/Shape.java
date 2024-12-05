@@ -1,12 +1,12 @@
 package org.example;
-
+import java.io.Serializable;
 import java.awt.*;
 
 /**
  *  abstract parent class
  */
 
-public abstract class Shape {
+public abstract class Shape implements Serializable {
 
     private Point p1;
     private Point p2;

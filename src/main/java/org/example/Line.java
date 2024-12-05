@@ -1,12 +1,12 @@
 package org.example;
-
+import java.io.Serializable;
 import java.awt.*;
 
 /**
  *  line child class
  */
 
-public class Line extends Shape {
+public class Line extends Shape implements Serializable {
 
     public Line(Point p1, Point p2, Color color) {
         super(p1, p2, color);

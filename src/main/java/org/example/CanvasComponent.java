@@ -4,10 +4,14 @@ import javax.management.remote.JMXConnectorServerFactory;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.io.Serializable;
 
-public class CanvasComponent extends JComponent {
+public class CanvasComponent extends JComponent implements Serializable {
+
 
     private enum ShapeType // Provide an enumerated value for each shape considered.
             // distinct values created in constant code convention form
@@ -21,10 +25,9 @@ public class CanvasComponent extends JComponent {
     private Point startPoint;//default starting point
     private Point endPoint;
     private boolean drawTrails;     // toggled value based on user response
-    private char save;
-    private char restore;
 
     JFileChooser fileChooser = new JFileChooser();
+
 
     public CanvasComponent() // default constructor using the above default values.
     {
@@ -34,8 +37,6 @@ public class CanvasComponent extends JComponent {
         currentShape = ShapeType.BOX;
         currentColor = Color.BLACK;
         drawTrails = false;
-        save = ' ';
-        restore = ' ';
 
     }
 
@@ -140,12 +141,32 @@ public class CanvasComponent extends JComponent {
                 currentColor = JColorChooser.showDialog(null, "Choose a shape color", currentColor);
                 break;
             case 's':
-                save = (char) fileChooser.showSaveDialog(getParent());
+                if (fileChooser.showSaveDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    try {
+                        FileOutputStream fos = new FileOutputStream(file);
+                        ObjectOutputStream oos = new ObjectOutputStream(fos);
+                        oos.writeObject(shapes);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 break;
-//            case 'r':
-//                restore = showOpenDialog();
-//                break;
-                default:          // Consider error processing  with alerts (unexpected values, logic errors, etc.)
+            case 'r':
+                 if (fileChooser.showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
+                     File file = fileChooser.getSelectedFile();
+                     try {
+                         FileInputStream fis = new FileInputStream(file);
+                         ObjectInputStream ois = new ObjectInputStream(fis);
+                         shapes = (List<Shape>)ois.readObject();
+                         System.out.println(Arrays.toString(shapes.toArray()));
+                         repaint();
+                     } catch (Exception e) {
+                         e.printStackTrace();
+                     }
+                 }
+                break;
+                default: // Consider error processing  with alerts (unexpected values, logic errors, etc.)
                 break;
         }
     }

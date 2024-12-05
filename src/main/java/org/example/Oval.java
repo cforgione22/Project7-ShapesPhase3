@@ -1,5 +1,5 @@
 package org.example;
-
+import java.io.Serializable;
 import java.awt.*;
 
 /**
@@ -7,7 +7,7 @@ import java.awt.*;
  */
 
 
-public class Oval extends Shape {
+public class Oval extends Shape implements Serializable {
 
     public Oval(Point p1, Point p2, Color color) {
         super(p1, p2, color);
